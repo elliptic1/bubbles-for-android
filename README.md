@@ -9,19 +9,6 @@ Bubbles for Android is an Android library to provide chat heads capabilities on 
 
 [![Download](https://api.bintray.com/packages/txusballesteros/maven/bubbles-for-android/images/download.svg) ](https://bintray.com/txusballesteros/maven/bubbles-for-android/_latestVersion) ![](https://img.shields.io/badge/platform-android-green.svg) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Bubbles%20for%20Android-green.svg?style=flat)](https://android-arsenal.com/details/1/2113)
 
-## How to use
-
-### Configuring your project dependencies
-
-Add the library dependency in your build.gradle file.
-
-```groovy
-dependencies {
-    ...
-    compile 'com.txusballesteros:bubbles:1.2.1'
-}
-```
-
 ### Adding your first Bubble
 
 Compose your Bubble layout, for example using a Xml layout file. Remember that the first view of your Bubble layout has to be a BubbleLayout view.
