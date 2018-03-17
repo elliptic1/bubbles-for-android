@@ -25,6 +25,7 @@
 package com.txusballesteros.bubbles.app
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         initializeBubblesManager()
 
         add.setOnClickListener { addNewBubble() }
+        about.setOnClickListener { startActivity(Intent(this, About::class.java)) }
     }
 
     private fun addNewBubble() {

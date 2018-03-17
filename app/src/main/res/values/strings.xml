@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  * Copyright Txus Ballesteros 2015 (@txusballesteros)
  *
  * This file is part of some open source application.
@@ -24,5 +23,10 @@
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
 -->
 <resources>
-    <string name="app_name">Bubbles</string>
+    <string name="app_name">Vol Bubble</string>
+    <string name="title_activity_about">About</string>
+    <string name="about_app">About App</string>
+    <string name="addbubble">Add Bubble</string>
+    <string name="icon_made_by">Icon made by Freepik at https://www.flaticon.com/authors/freepik</string>
+    <string name="todd_b_smith_enterprises_llc_http_toddbsmith_com">Todd B Smith Enterprises LLC http://toddbsmith.com</string>
 </resources>
