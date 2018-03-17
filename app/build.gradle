@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 27
         versionCode 1
-        versionName parent.ext.libraryVersion
+        versionName "1.0.0"
     }
     buildTypes {
         release {

@@ -1,10 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-
-version = parent.ext.libraryVersion
-group = parent.ext.mavenGroupId
-def siteUrl = parent.ext.siteUrl
-def gitUrl = parent.ext.gitUrl
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
