@@ -24,50 +24,51 @@
  */
 package com.txusballesteros.bubbles.app
 
+import android.content.Context
+import android.media.AudioManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Toast
-
 import com.txusballesteros.bubbles.BubbleLayout
 import com.txusballesteros.bubbles.BubblesManager
-import com.txusballesteros.bubbles.OnInitializedCallback
+import com.txusballesteros.bubbles.app.R.layout.*
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
-    private var bubblesManager: BubblesManager? = null
+    private lateinit var bubblesManager: BubblesManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(activity_main)
 
         initializeBubblesManager()
 
-        findViewById<View>(R.id.add).setOnClickListener { addNewBubble() }
+        add.setOnClickListener { addNewBubble() }
     }
 
     private fun addNewBubble() {
-        val bubbleView = LayoutInflater.from(this@MainActivity).inflate(R.layout.bubble_layout, null) as BubbleLayout
+        val bubbleView = LayoutInflater.from(this@MainActivity).inflate(bubble_layout, null) as BubbleLayout
         bubbleView.setOnBubbleRemoveListener { }
         bubbleView.setOnBubbleClickListener {
-            Toast.makeText(applicationContext, "Clicked !",
-                    Toast.LENGTH_SHORT).show()
+            val audio = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI)
         }
         bubbleView.setShouldStickToWall(true)
-        bubblesManager!!.addBubble(bubbleView, 60, 20)
+        bubblesManager.addBubble(bubbleView, 60, 20)
     }
 
     private fun initializeBubblesManager() {
         bubblesManager = BubblesManager.Builder(this)
-                .setTrashLayout(R.layout.bubble_trash_layout)
+                .setTrashLayout(bubble_trash_layout)
                 .setInitializationCallback { addNewBubble() }
                 .build()
-        bubblesManager!!.initialize()
+        bubblesManager.initialize()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        bubblesManager!!.recycle()
+        bubblesManager.recycle()
     }
 }
