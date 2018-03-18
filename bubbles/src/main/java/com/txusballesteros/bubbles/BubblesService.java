@@ -36,6 +36,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,15 +51,6 @@ public class BubblesService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        for (BubbleLayout bubble : bubbles) {
-            recycleBubble(bubble);
-        }
-        bubbles.clear();
-        return super.onUnbind(intent);
     }
 
     private void recycleBubble(final BubbleLayout bubble) {

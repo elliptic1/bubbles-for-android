@@ -24,12 +24,17 @@
  */
 package com.txusballesteros.bubbles.app
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
+import android.widget.Toast
 import com.txusballesteros.bubbles.BubbleLayout
 import com.txusballesteros.bubbles.BubblesManager
 import com.txusballesteros.bubbles.app.R.layout.*
@@ -38,16 +43,37 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var bubblesManager: BubblesManager
+    private var bubblesManager: BubblesManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
 
-        initializeBubblesManager()
-
         add.setOnClickListener { addNewBubble() }
         about.setOnClickListener { startActivity(Intent(this, About::class.java)) }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                myIntent.data = Uri.parse("package:" + packageName)
+                startActivityForResult(myIntent, 101)
+            } else {
+                initializeBubblesManager()
+            }
+        } else {
+            initializeBubblesManager()
+        }
+    }
+
+    @SuppressLint("NewApi")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 101 && Settings.canDrawOverlays(this)) {
+            initializeBubblesManager()
+        } else {
+            Toast.makeText(this@MainActivity, "Requires Draw Over Apps permission", Toast.LENGTH_LONG).show()
+            finish()
+        }
     }
 
     private fun addNewBubble() {
@@ -58,19 +84,14 @@ class MainActivity : AppCompatActivity() {
             audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI)
         }
         bubbleView.setShouldStickToWall(true)
-        bubblesManager.addBubble(bubbleView, 60, 20)
+        bubblesManager?.addBubble(bubbleView, 60, 20)
     }
 
     private fun initializeBubblesManager() {
         bubblesManager = BubblesManager.Builder(this)
                 .setTrashLayout(bubble_trash_layout)
-                .setInitializationCallback { addNewBubble() }
                 .build()
-        bubblesManager.initialize()
+        bubblesManager?.initialize()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        bubblesManager.recycle()
-    }
 }

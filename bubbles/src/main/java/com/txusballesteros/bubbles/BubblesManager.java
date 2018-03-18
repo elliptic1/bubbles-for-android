@@ -36,7 +36,6 @@ public class BubblesManager {
     private boolean bounded;
     private BubblesService bubblesService;
     private int trashLayoutResourceId;
-    private OnInitializedCallback listener;
 
     private static BubblesManager getInstance(Context context) {
         if (INSTANCE == null) {
@@ -52,9 +51,6 @@ public class BubblesManager {
             BubblesManager.this.bubblesService = binder.getService();
             configureBubblesService();
             bounded = true;
-            if (listener != null) {
-                listener.onInitialized();
-            }
         }
 
         @Override
@@ -77,19 +73,9 @@ public class BubblesManager {
                 Context.BIND_AUTO_CREATE);
     }
 
-    public void recycle() {
-        context.unbindService(bubbleServiceConnection);
-    }
-
     public void addBubble(BubbleLayout bubble, int x, int y) {
         if (bounded) {
             bubblesService.addBubble(bubble, x, y);
-        }
-    }
-
-    public void removeBubble(BubbleLayout bubble) {
-        if (bounded) {
-            bubblesService.removeBubble(bubble);
         }
     }
 
@@ -98,11 +84,6 @@ public class BubblesManager {
 
         public Builder(Context context) {
             this.bubblesManager = getInstance(context);
-        }
-
-        public Builder setInitializationCallback(OnInitializedCallback listener) {
-            bubblesManager.listener = listener;
-            return this;
         }
 
         public Builder setTrashLayout(int trashLayoutResourceId) {
