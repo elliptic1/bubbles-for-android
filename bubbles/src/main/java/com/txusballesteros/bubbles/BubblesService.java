@@ -28,14 +28,15 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,15 +51,6 @@ public class BubblesService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        for (BubbleLayout bubble : bubbles) {
-            recycleBubble(bubble);
-        }
-        bubbles.clear();
-        return super.onUnbind(intent);
     }
 
     private void recycleBubble(final BubbleLayout bubble) {
@@ -122,16 +114,15 @@ public class BubblesService extends Service {
     }
 
     private WindowManager.LayoutParams buildLayoutParamsForBubble(int x, int y) {
-        int type;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
-            type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+        int typeOverlay = WindowManager.LayoutParams.TYPE_PHONE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            typeOverlay = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         }
+
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                type,
+                typeOverlay,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSPARENT);
         params.gravity = Gravity.TOP | Gravity.START;
@@ -144,16 +135,15 @@ public class BubblesService extends Service {
         int x = 0;
         int y = 0;
 
-        int type;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
-            type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+        int typeOverlay = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            typeOverlay = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         }
+
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
-                type,
+                typeOverlay,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSPARENT);
         params.x = x;

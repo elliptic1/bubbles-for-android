@@ -1,20 +1,17 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-
-version = parent.ext.libraryVersion
-group = parent.ext.mavenGroupId
-def siteUrl = parent.ext.siteUrl
-def gitUrl = parent.ext.gitUrl
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName version
     }
@@ -26,21 +23,7 @@ android {
     }
 }
 
-dependencies { }
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "bubbles-for-android"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
-}
+dependencies { implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" }
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -60,4 +43,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives javadocJar
     archives sourcesJar
+}
+repositories {
+    mavenCentral()
 }
