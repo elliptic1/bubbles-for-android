@@ -24,6 +24,7 @@
  */
 package com.txusballesteros.bubbles;
 
+import android.graphics.Point;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -76,22 +77,26 @@ final class BubblesLayoutCoordinator {
             int trashRight = (trashContentView.getLeft() + trashWidth + (trashWidth / 2));
             int trashTop = (trashContentView.getTop() - (trashHeight / 2));
             int trashBottom = (trashContentView.getTop() + trashHeight + (trashHeight / 2));
+            Point trashCenter = new Point((trashLeft + trashRight)/2, (trashTop + trashBottom)/2);
             int bubbleWidth = bubble.getMeasuredWidth();
             int bubbleHeight = bubble.getMeasuredHeight();
             int bubbleLeft = bubble.getViewParams().x;
             int bubbleRight = bubbleLeft + bubbleWidth;
             int bubbleTop = bubble.getViewParams().y;
             int bubbleBottom = bubbleTop + bubbleHeight;
-            if (bubbleLeft >= trashLeft && bubbleRight <= trashRight) {
-                if (bubbleTop >= trashTop && bubbleBottom <= trashBottom) {
-                    result = true;
-                }
+            Point bubbleCenter = new Point((bubbleLeft + bubbleRight)/2, (bubbleTop + bubbleBottom)/2);
+            if (isNearPoint(trashCenter, bubbleCenter)) {
+                result = true;
             }
         }
         return result;
     }
 
-    public void notifyBubbleRelease(BubbleLayout bubble) {
+    private boolean isNearPoint(Point a, Point b) {
+       return Math.abs(a.x - b.x) < 100 && Math.abs(a.y - b.y) < 100;
+    }
+
+    void notifyBubbleRelease(BubbleLayout bubble) {
         if (trashView != null) {
             if (checkIfBubbleIsOverTrash(bubble)) {
                 bubblesService.removeBubble(bubble);
